@@ -1,20 +1,23 @@
-﻿#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
+﻿#include <stdio.h>  // 
+#include <stdlib.h> // import knihoven
+#include <string.h> //
 #include "kontaktyDB.h"
 
-// Funkce pro přidání kontaktu do seznamu
-void add(const char* nick, const char* name, const char* surname,
-    const char* phnumber, const char* email, t_kontakt** uk_prvni)
-{
-    t_kontakt* novyKontakt;  // Ukazatel pro nový kontakt
-    t_kontakt* aktKontakt;   // Ukazatel na aktuální kontakt
+int last_id = 1;
 
-    // Alokace dynamické paměti pro nový kontakt
-    novyKontakt = (t_kontakt*)malloc(sizeof(t_kontakt));
+void add(char* nick, char* name, char* surname, char* phnumber, char* email, struct t_kontakt** uk_prvni) {  // funkce pro přidání kontaktu
+    struct t_kontakt* novyKontakt; // ukazatel pro nový vkládaný kontakt
+    struct t_kontakt* aktKontakt;  // ukazatel na aktuální kontakt
 
-    // Naplnění struktury nového kontaktu
+    // alokace dynamické paměti
+    novyKontakt = (struct t_kontakt*)malloc(sizeof(struct t_kontakt));
+    if (novyKontakt == NULL) {
+        printf("Chyba alokace paměti!\n");
+        return;
+    }
+    
+    // naplnění struktury
+    novyKontakt->id = last_id++;
     strcpy_s(novyKontakt->nick, NICK_SIZE, nick);
     strcpy_s(novyKontakt->name, NAME_SIZE, name);
     strcpy_s(novyKontakt->surname, SURNAME_SIZE, surname);
@@ -22,62 +25,39 @@ void add(const char* nick, const char* name, const char* surname,
     strcpy_s(novyKontakt->email, EMAIL_SIZE, email);
     novyKontakt->dalsi = NULL;
 
-    // Pokud je seznam prázdný, přidáme kontakt na začátek
-    if (*uk_prvni == NULL)
-    {
+    if (*uk_prvni == NULL) { // kontroluje jestli je seznam prázdný
         *uk_prvni = novyKontakt;
         return;
     }
 
-    // Vkládáme na začátek seznamu, pokud je novější přezdívka (nick)
-    if (strcmp(novyKontakt->nick, (*uk_prvni)->nick) < 0)
-    {
-        novyKontakt->dalsi = *uk_prvni;
-        *uk_prvni = novyKontakt;
-        return;
-    }
-
-    // Procházení seznamu a přidání na správné místo (seřazeno podle přezdívky)
+    // vložíme na začátek, pokud není žádný kontakt předchozí
     aktKontakt = *uk_prvni;
-    while (aktKontakt)
-    {
-        if (aktKontakt->dalsi == NULL) // Jsme na posledním kontaktu
-        {
-            aktKontakt->dalsi = novyKontakt; // Přidáváme na konec
+    while (aktKontakt) { // procházení seznamu
+        if (aktKontakt->dalsi == NULL) { // jsme na posledním kontaktu
+            aktKontakt->dalsi = novyKontakt; // přidání na konec seznamu
             return;
         }
-        else if (strcmp(novyKontakt->nick, aktKontakt->dalsi->nick) < 0)
-        {
-            novyKontakt->dalsi = aktKontakt->dalsi; // Vkládáme za aktuální kontakt
-            aktKontakt->dalsi = novyKontakt;
-            return;
-        }
-        aktKontakt = aktKontakt->dalsi; // Posun na další kontakt
+        aktKontakt = aktKontakt->dalsi; // posun na další kontakt
     }
 }
 
-// Funkce pro smazání kontaktu ze seznamu podle přezdívky
-void del(const char* nick, t_kontakt** uk_prvni)
-{
-    t_kontakt* aktKontakt;
+void del(int id, struct t_kontakt** uk_prvni) {
+    struct t_kontakt* aktKontakt;
 
     // Pokud je kontakt ke smazání na začátku seznamu
-    while (*uk_prvni && strcmp((*uk_prvni)->nick, nick) == 0)
-    {
-        t_kontakt* novyPrvni = (*uk_prvni)->dalsi;
-        free(*uk_prvni); // Uvolnění kontaktu z paměti
-        *uk_prvni = novyPrvni;
+    while (*uk_prvni && (*uk_prvni)->id == id) {
+        struct t_kontakt* novyPrvni = (*uk_prvni)->dalsi;
+        free(*uk_prvni);  // Uvolnění paměti
+        *uk_prvni = novyPrvni;  // Posuneme ukazatel na nový první kontakt
     }
 
     // Mazání druhého a dalších kontaktů v seznamu
     aktKontakt = *uk_prvni;
-    while (aktKontakt && aktKontakt->dalsi) // Procházení seznamu
-    {
-        if (strcmp(aktKontakt->dalsi->nick, nick) == 0) // Kontakt ke smazání
-        {
-            t_kontakt* novyDalsi = aktKontakt->dalsi->dalsi;
-            free(aktKontakt->dalsi); // Uvolnění kontaktu z paměti
-            aktKontakt->dalsi = novyDalsi;
+    while (aktKontakt && aktKontakt->dalsi) { // Procházení seznamu
+        if (aktKontakt->dalsi->id == id) { // Kontakt ke smazání
+            struct t_kontakt* novyDalsi = aktKontakt->dalsi->dalsi;
+            free(aktKontakt->dalsi);  // Uvolnění paměti
+            aktKontakt->dalsi = novyDalsi; // Posuneme ukazatel na další kontakt
             return;
         }
         aktKontakt = aktKontakt->dalsi; // Posun na další kontakt

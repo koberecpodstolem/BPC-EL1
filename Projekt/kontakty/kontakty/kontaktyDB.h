@@ -7,6 +7,7 @@
 #define EMAIL_SIZE 100     // Maximální délka e-mailu
 
 struct t_kontakt {
+    int id;
     char nick[NICK_SIZE];         // Přezdívka
     char name[NAME_SIZE];         // Jméno
     char surname[SURNAME_SIZE];   // Příjmení
@@ -16,4 +17,4 @@ struct t_kontakt {
 };
 
 void add(char* nick, char* name, char* surname, char* phnumber, char* email, struct t_kontakt** uk_prvni);
-void del(char* nick, struct t_kontakt** uk_prvni);
+void del(int id, struct t_kontakt** uk_prvni);
