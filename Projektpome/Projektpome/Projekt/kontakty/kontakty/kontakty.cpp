@@ -149,7 +149,7 @@ void FindBySurname() {
     while (getchar() != '\n');  // Odstranění přebytečných znaků
 
     struct t_kontakt* aktKontakt = prvni;
-    int nalezeno = 0;
+    bool nalezeno = 0;
 
     printf("\nVyhledane kontakty:\n");
     while (aktKontakt) {
