@@ -6,6 +6,8 @@
 
 struct t_kontakt* prvni = NULL; 
 
+//####################################################################################################
+
 void Save2File()
 {
     FILE* file = fopen("../../../../kontakty.txt", "w"); 
@@ -29,6 +31,7 @@ void Save2File()
     printf("Contacts saved\n");
 }
 
+//####################################################################################################
 
 void LoadFromFile()
 {
@@ -51,6 +54,7 @@ void LoadFromFile()
     fclose(file); 
     printf("Loaded.\n");
 }
+//####################################################################################################
 
 void OnAdd()
 {
@@ -84,6 +88,8 @@ void OnAdd()
     add(my_nick, my_name, my_surname, my_phnumber, my_email, &prvni); // Volame pridavaci funkci
 }
 
+//####################################################################################################
+
 void OnDel() {
     int my_id;
 
@@ -95,6 +101,8 @@ void OnDel() {
     // Volání funkce pro odstranění kontaktu podle ID
     del(my_id, &prvni);
 }
+
+//####################################################################################################
 
 void detail()
 {
@@ -127,6 +135,8 @@ void detail()
     getchar();
 }
 
+//####################################################################################################
+
 void ShowContacts() {
     struct t_kontakt* aktKontakt = prvni; 
     printf("\n\n");
@@ -140,6 +150,8 @@ void ShowContacts() {
     }
     getchar();
 }
+
+//####################################################################################################
 
 void FindBySurname() {
     char hledane_prijmeni[SURNAME_SIZE];
@@ -171,6 +183,8 @@ void FindBySurname() {
     getchar();  
 }
 
+//####################################################################################################
+
 int main()
 {
     LoadFromFile();
@@ -179,11 +193,11 @@ int main()
     do
     {
         system("cls");
-        printf("A: Pridat     ");
+        printf("A: Novy     ");
         printf("D: Smazat     ");
-        printf("P: Tisk     ");
-        printf("C: Detail kontaktu     ");
-        printf("H: Hledat podle prijmeni     ");
+        printf("P: Zobrazit vse     ");
+        printf("C: Otevrit kontakt     ");
+        printf("H: Hledat prijmeni     ");
         printf("Q: Ulozit a konec\n\n");
 
         cmd = tolower(getchar());

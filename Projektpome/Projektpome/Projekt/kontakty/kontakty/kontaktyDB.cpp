@@ -5,6 +5,8 @@
 
 int last_id = 1;
 
+//####################################################################################################
+
 void add(char* nick, char* name, char* surname, char* phnumber, char* email, struct t_kontakt** uk_prvni) { 
     struct t_kontakt* novyKontakt; 
     struct t_kontakt* aktKontakt;  
@@ -40,6 +42,8 @@ void add(char* nick, char* name, char* surname, char* phnumber, char* email, str
         aktKontakt = aktKontakt->dalsi; 
     }
 }
+
+//####################################################################################################
 
 void del(int id, struct t_kontakt** uk_prvni) {
     struct t_kontakt* aktKontakt;
