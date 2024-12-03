@@ -96,29 +96,34 @@ void OnDel() {
     del(my_id, &prvni);
 }
 
-void detail(int id)
+void detail()
 {
-    struct t_kontakt* aktKontakt = prvni; // ukazatel na aktualni kontakt
+    int id;
 
-    // Procházíme seznam a hledáme kontakt s odpovídajícím id
+    printf("\nID: ");
+    scanf_s("%d", &id);
+    while (getchar() != '\n');
+ 
+    struct t_kontakt* aktKontakt = prvni;
+    printf("\n\n");
     while (aktKontakt)
     {
-        if (aktKontakt->id == id) // Pokud nalezneme kontakt s požadovaným id
+        if (aktKontakt->id == id) 
         {
-            // Vytiskneme všechny detaily kontaktu
             printf("ID: %d\n", aktKontakt->id);
             printf("Prezdivka: %s\n", aktKontakt->nick);
             printf("Jmeno: %s\n", aktKontakt->name);
             printf("Prijmeni: %s\n", aktKontakt->surname);
             printf("Telefon: %s\n", aktKontakt->phnumber);
             printf("E-mail: %s\n", aktKontakt->email);
+            getchar();
             return; // Kontakt byl nalezen, ukončíme funkci
         }
         aktKontakt = aktKontakt->dalsi; // Posun na další kontakt
     }
-
-    // Pokud kontakt s požadovaným id nebyl nalezen
-    printf("Kontakt s ID %d nenalezen.\n", id);
+    
+    printf("Kontakt nenalezen.\n");
+    getchar();
 }
 
 void ShowContacts() {
@@ -132,9 +137,7 @@ void ShowContacts() {
             aktKontakt->surname);
         aktKontakt = aktKontakt->dalsi; // posun na dalsi kontakt
     }
-
-    //getchar();
-
+    getchar();
 }
 
 int main()
@@ -144,10 +147,11 @@ int main()
 
     do
     {
-        system("cls");        // smaze obrazovku
+        system("cls");
         printf("A: Pridat     ");
         printf("D: Smazat     ");
         printf("P: Tisk     ");
+        printf("C: Detail kontaktu     ");
         printf("Q: Ulozit a konec\n\n");
 
         cmd = tolower(getchar());
@@ -156,13 +160,16 @@ int main()
         switch (cmd)
         {
         case 'a':
-            OnAdd();                    // volame pridani
+            OnAdd();
             break;
         case 'd':
-            OnDel();                    // volame mazani
+            OnDel();         
             break;
         case 'p':
             ShowContacts();
+            break;
+        case 'c':
+            detail();
             break;
         }
     } while (cmd != 'q');
